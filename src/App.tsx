@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import TacticalBoard from "./components/TacticalBoard";
+import { useEffect, useState } from "react";
+import { PlayerOnBoard } from "./types/Player";
+import { fetchPlayerData } from "./utils/fetchPlayerData";
 
 function App() {
+  const [players, setPlayers] = useState<PlayerOnBoard[] | null>(() => []);
+
+  useEffect(() => {
+    fetchPlayerData<PlayerOnBoard[]>("./testPlayers.json")
+      .then((data) => {
+        setPlayers(data);
+      })
+      .catch((error) => console.error(error));
+
+    return () => {
+      console.log("cleaned up");
+    };
+  }, [setPlayers]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="text-center text-3xl mx-auto max-w-screen-sm">
+      Hello Tailwind is online!
+      <TacticalBoard playerData={players} />
     </div>
   );
 }
