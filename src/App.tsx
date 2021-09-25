@@ -7,6 +7,7 @@ import { PlayerOnBoard } from "./types/Player";
 import { fetchPlayerData } from "./utils/fetchPlayerData";
 import {
   schemeCategory10,
+  range,
   select,
   drag,
   D3DragEvent,
@@ -18,7 +19,7 @@ const radius = 16;
 const width = 500;
 const height = 500;
 
-const initialPlayers = require("./testPlayers.json");
+//const initialPlayers = require("./testPlayers.json");
 
 const draw = (ctx: CanvasRenderingContext2D | null, player: PlayerOnBoard) => {
   if (ctx) {
@@ -31,6 +32,13 @@ const draw = (ctx: CanvasRenderingContext2D | null, player: PlayerOnBoard) => {
     ctx.stroke();
   }
 };
+
+const initialPlayers: PlayerOnBoard[] = range(20).map((i) => ({
+  id: i,
+  x: Math.random() * (width - radius * 2) + radius,
+  y: Math.random() * (height - radius * 2) + radius,
+  color: schemeCategory10[i % 10],
+}));
 
 const pointer = (event: MouseEvent) => {
   const node = event.currentTarget;
@@ -47,77 +55,57 @@ const pointer = (event: MouseEvent) => {
 
 function App() {
   const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext("2d");
+    const canvasContainer = select(canvasContainerRef.current)
+      .append("canvas")
+      .attr("width", 500)
+      .attr("height", 500);
 
-    players.forEach((player, i) => {
-      if (ctx) draw(ctx, player);
+    const dragsubject = (
+      event: D3DragEvent<HTMLCanvasElement, unknown, unknown>
+    ) => {
+      let subject = null;
+      let distance = Infinity;
+      for (const p of players) {
+        let d = Math.hypot(event.x - p.x, event.y - p.y);
+        if (d < distance) {
+          distance = d;
+          subject = p;
+        }
+      }
+      return subject;
+    };
+
+    const canvasDrag = drag<HTMLCanvasElement, unknown, unknown>()
+      .subject(dragsubject)
+      .on("start", (e) => {
+        console.error(
+          "drag started near: " + e.subject.id + " " + e.subject.color
+        );
+      })
+      .on("drag", (e) => console.error("dragged"))
+      .on("end", (e) => {
+        console.error("drag ended near" + e.subject.id + " " + e.subject.color);
+      });
+    canvasContainer.call(canvasDrag);
+
+    const ctx = canvasContainer.node()?.getContext("2d");
+
+    players.forEach((p, i) => {
+      if (ctx) {
+        draw(ctx, p);
+      }
     });
   }, [players]);
-
-  const dragsubject = (
-    event: D3DragEvent<DraggedElementBaseType, null, PlayerOnBoard>
-  ) => {
-    //console.log(event);
-    let subject: PlayerOnBoard | null = null;
-    let distance = Infinity;
-    for (const c of players) {
-      let d = Math.hypot(event.x - c.x, event.y - c.y);
-      if (d < distance) {
-        distance = d;
-        subject = c;
-      }
-    }
-    return subject;
-  };
-
-  const dragstarted = (event: DragEvent) => {
-    console.debug(event.clientX + ", " + event.clientY);
-  };
-
-  //need to be clever about how we change the state here...
-  //we should probably store the players by id. then i can easily
-  const dragged = (event: DragEvent) => {
-    console.debug(event.clientX + ", " + event.clientY);
-  };
-
-  const dragended = (event: DragEvent) => {
-    console.debug(event.clientX + ", " + event.clientY);
-  };
-
-  /* const canvasDrag = drag<HTMLCanvasElement, unknown, unknown>()
-    .subject(dragsubject)
-    .on("start", dragstarted)
-    .on("drag", dragged)
-    .on("end", dragended); */
 
   console.log("Rendering canvas");
 
   return (
     <div className="max-w-screen-lg mx-auto">
       <div className="m-3 border border-solid border-gray-600">
-        <div>
-          <canvas
-            className="my-4 mx-auto border border-dashed border-gray-300"
-            ref={canvasRef}
-            draggable
-            onDragStart={(e) => {
-              const [x, y] = pointer(e);
-              console.error("drag started: " + x, +" " + y);
-            }}
-            onDrag={() => console.log("dragging")}
-            onDragEnd={(e) => {
-              const [x, y] = pointer(e);
-              console.error("drag ended: " + x, +" " + y);
-            }}
-            onClick={() => console.log("clicked")}
-            onDoubleClick={() => console.log("double clicked")}
-            width={width}
-            height={height}
-          />
-        </div>
+        <div className="canvas-container" ref={canvasContainerRef}></div>
       </div>
     </div>
   );
