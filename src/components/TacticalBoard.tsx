@@ -1,33 +1,26 @@
 import { PlayerOnBoard } from "../types/Player";
 import BoardDimensions from "../types/TacticalBoard";
 import useTacticalBoardCanvas from "../hooks/useTacticalBoardCanvas";
-import { useEffect } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
-const TacticalBoard: React.FunctionComponent<{
-  playerData: PlayerOnBoard[] | null;
-}> = ({ playerData }) => {
-  //1. get a canvas ref for this tactical board
-  //2. pass in a render function
-  //3. render the players to the board
+type CanvasProps = {
+  width: number;
+  height: number;
+};
 
-  const [canvasRef, players, setPlayers] = useTacticalBoardCanvas();
+export const PureCanvas = forwardRef<HTMLCanvasElement, CanvasProps>(
+  (props, ref) => {
+    return <canvas width={props.width} height={props.height} ref={ref} />;
+  }
+);
 
-  useEffect(() => {
-    setPlayers(playerData);
-    return () => {
-      console.log("cleaned up");
-    };
-  }, [playerData, setPlayers]);
-
-  console.log("rendering Tactical Board");
+export const Canvas = (props: CanvasProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
-    <canvas
-      className="canvas"
-      ref={canvasRef}
-      width={800}
-      height={600}
-    ></canvas>
+    <PureCanvas ref={canvasRef} width={props.width} height={props.height} />
   );
 };
 
-export default TacticalBoard;
+export const CanvasContainer = (playerData: PlayerOnBoard[]) => {
+  const [players, setPlayers] = useState<PlayerOnBoard[]>(playerData);
+};
