@@ -3,6 +3,7 @@ interface PlayerOnBoard {
     x: number;
     y: number;
     color: string;
+    active: boolean;
 }
 
 export type {PlayerOnBoard}

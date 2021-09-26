@@ -36,13 +36,13 @@ const initialPlayers: PlayerOnBoard[] = range(20).map((i) => ({
   x: Math.random() * (width - radius * 2) + radius,
   y: Math.random() * (height - radius * 2) + radius,
   color: schemeCategory10[i % 10],
+  active: false,
 }));
 
 function App() {
   const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
 
   const onDragPlayer = (players: PlayerOnBoard[]) => {
-    console.error(players);
     setPlayers(players);
   };
 
@@ -56,13 +56,15 @@ function App() {
       </div>
       <div>
         <ul>
-          {players.map((p, i) => {
-            return (
-              <li key={p.id}>
-                {p.id} --- {p.x},{p.y}
-              </li>
-            );
-          })}
+          {players
+            .sort((a, b) => a.id - b.id)
+            .map((p, i) => {
+              return (
+                <li key={p.id}>
+                  {p.id} --- {p.x.toFixed(0)},{p.y.toFixed(0)}
+                </li>
+              );
+            })}
         </ul>
       </div>
     </div>

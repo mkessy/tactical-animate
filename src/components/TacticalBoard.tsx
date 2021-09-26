@@ -27,13 +27,6 @@ export const PureCanvas = forwardRef<HTMLCanvasElement, CanvasProps>(
   }
 );
 
-export const Canvas = (props: CanvasProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  return (
-    <PureCanvas ref={canvasRef} width={props.width} height={props.height} />
-  );
-};
-
 export const CanvasContainer = (props: CanvasContainerProps) => {
   const radius = 16;
   const width = 500;
@@ -64,6 +57,7 @@ export const CanvasContainer = (props: CanvasContainerProps) => {
     const canvasDrag = drag()
       .subject(dragsubject)
       .on("start", (e) => {
+        e.subject.active = true;
         const players = playersToDrag.current;
         players.splice(players.indexOf(e.subject), 1);
         players.push(e.subject);
@@ -73,19 +67,25 @@ export const CanvasContainer = (props: CanvasContainerProps) => {
         e.subject.x = Math.max(0, Math.min(width, e.x));
         e.subject.y = Math.max(0, Math.min(height, e.y));
       })
-      .on("end", (e) => {})
+      .on("end", (e) => {
+        e.subject.active = false;
+      })
       .on("start.draw drag.draw end.draw", () => {
         ctx?.clearRect(0, 0, width, height);
-        for (const { x, y, color } of playersToDrag.current) {
+        for (const { x, y, color, active } of playersToDrag.current) {
           if (ctx) {
             ctx.beginPath();
             ctx.moveTo(x + radius, y);
             ctx.arc(x, y, radius, 0, 2 * Math.PI);
             ctx.fillStyle = color;
             ctx.fill();
+            if (active) {
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
           }
         }
-        props.setPlayerData(playersToDrag.current);
+        props.setPlayerData([...playersToDrag.current]);
       });
 
     canvasContainer.call(canvasDrag as any);
