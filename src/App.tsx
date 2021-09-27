@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   SyntheticEvent,
   useCallback,
+  useMemo,
   useRef,
 } from "react";
 import logo from "./logo.svg";
@@ -29,15 +30,20 @@ type CanvasContainerProps = {
   setPlayerData: (players: PlayerOnBoard[]) => void;
 };
 
-//const initialPlayers = require("./testPlayers.json");
+const initialPlayers: PlayerOnBoard[] = range(20).map((v, i) => {
+  const x = Math.random() * (width - radius * 2) + radius;
+  const y = Math.random() * (height - radius * 2) + radius;
 
-const initialPlayers: PlayerOnBoard[] = range(20).map((i) => ({
-  id: i,
-  x: Math.random() * (width - radius * 2) + radius,
-  y: Math.random() * (height - radius * 2) + radius,
-  color: schemeCategory10[i % 10],
-  active: false,
-}));
+  return {
+    id: i,
+    x,
+    y,
+    color: schemeCategory10[i % 10],
+    active: false,
+    history: [[x, y]],
+    draggable: true,
+  };
+});
 
 function App() {
   const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
@@ -58,10 +64,20 @@ function App() {
         <ul>
           {players
             .sort((a, b) => a.id - b.id)
-            .map((p, i) => {
+            .map((p) => {
               return (
                 <li key={p.id}>
-                  {p.id} --- {p.x.toFixed(0)},{p.y.toFixed(0)}
+                  <span
+                    className={
+                      (p.active ? "bg-green-300" : "") +
+                      (!p.draggable ? "bg-red-300" : "")
+                    }
+                  >
+                    {p.id} --- {p.x.toFixed(0)},{p.y.toFixed(0)} |{" "}
+                    {p.history
+                      .map(([x, y]) => [x.toFixed(), y.toFixed()].join(","))
+                      .join(" ")}
+                  </span>
                 </li>
               );
             })}
