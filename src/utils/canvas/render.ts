@@ -1,26 +1,29 @@
 import { PlayerOnBoard } from "../../types/Player";
+import config from "../../config";
+import { render } from "react-dom";
 
 type renderCanvasType = (
     ctx: CanvasRenderingContext2D,
     players: PlayerOnBoard[]
   ) => void;
 
-const makeRenderFunction(ctx: CanvasRenderingContext2D, players: PlayerOnBoard[], width: number, height: number) => {
+const makeRenderFunc = (ctx: CanvasRenderingContext2D, players: PlayerOnBoard[]) => {
 
-    return () => {
+     function render(): void {
 
-        ctx?.clearRect(0, 0, width, height);
+      const {WIDTH, HEIGHT} = config.canvas
+        ctx?.clearRect(0, 0, WIDTH, HEIGHT);
         for (const {
           x,
           y,
           color,
           active,
           draggable,
-        } of PlayersOnBoardState.current) {
+        } of players) {
           if (ctx) {
             ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.moveTo(x + config.canvas.RADIUS, y);
+            ctx.arc(x, y, config.canvas.RADIUS, 0, 2 * Math.PI);
             if (!draggable) {
               ctx.fillStyle = "black";
               ctx.fill();
@@ -34,34 +37,10 @@ const makeRenderFunction(ctx: CanvasRenderingContext2D, players: PlayerOnBoard[]
             }
           }
         }
-    } 
+    }
+    
+    return render;
 
 }
 
-function renderPlayersToCanvas(ctx, players): renderCanvasType {
-    ctx?.clearRect(0, 0, width, height);
-    for (const {
-      x,
-      y,
-      color,
-      active,
-      draggable,
-    } of PlayersOnBoardState.current) {
-      if (ctx) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        if (!draggable) {
-          ctx.fillStyle = "black";
-          ctx.fill();
-        } else {
-          ctx.fillStyle = color;
-          ctx.fill();
-        }
-        if (active) {
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-      }
-    }
-  }
+export default makeRenderFunc;
