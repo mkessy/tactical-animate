@@ -1,14 +1,22 @@
-type CordPair = [number, number];
-type PlayerOnBoardHistory = CordPair[]
+import { interpolate, interpolateArray } from "d3";
+
+type PlayerOnBoardHistory = [number, number][]
 
 interface PlayerOnBoard {
     id: number;
     x: number;
     y: number;
-    color: string;
+    color: string; // style type
     active: boolean;
     draggable: boolean;
     history: PlayerOnBoardHistory;
+    team?: string;
 }
+type interpolatorType = interpolateA
 
-export type {PlayerOnBoard};
+interface InterpolatedPlayer {
+  id: number;
+  color: string;
+  interpolator: ReturnType<typeof interpolate>
+}
+export type {PlayerOnBoard, InterpolatedPlayer};

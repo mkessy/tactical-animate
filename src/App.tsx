@@ -1,9 +1,10 @@
 import "./App.css";
-import { CanvasContainer } from "./components/TacticalBoard";
+import { CanvasContainer } from "./components/CanvasContainer";
 import { useState } from "react";
 import { PlayerOnBoard } from "./types/Player";
 import { schemeCategory10, range } from "d3";
 import { CanvasContainerProps } from "./types/Canvas";
+import TacticalBoard from "./components/TacticalBoard";
 
 const radius = 16;
 const width = 500;
@@ -27,42 +28,14 @@ const initialPlayers: PlayerOnBoard[] = range(20).map((v, i) => {
 function App() {
   const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
 
-  const onDragPlayer = (players: PlayerOnBoard[]) => {
-    setPlayers(players);
-  };
-
-  const canvasProps: CanvasContainerProps = {
-    players: initialPlayers,
-    onCanvasStateChange: onDragPlayer,
-  };
-
   return (
     <div className="flex max-w-screen-lg mx-auto">
-      <div className="m-3 border border-solid border-gray-600">
-        <CanvasContainer {...canvasProps} />
-      </div>
+      <div className="m-3 border border-solid border-gray-600"></div>
       <div>
-        <ul>
-          {players
-            .sort((a, b) => a.id - b.id)
-            .map((p) => {
-              return (
-                <li key={p.id}>
-                  <span
-                    className={
-                      (p.active ? "bg-green-300" : "") +
-                      (!p.draggable ? "bg-red-300" : "")
-                    }
-                  >
-                    {p.id} --- {p.x.toFixed(0)},{p.y.toFixed(0)} |{" "}
-                    {p.history
-                      .map(([x, y]) => [x.toFixed(), y.toFixed()].join(","))
-                      .join(" ")}
-                  </span>
-                </li>
-              );
-            })}
-        </ul>
+        <TacticalBoard
+          initPlayers={initialPlayers}
+          setGlobalCanvasState={setPlayers}
+        />
       </div>
     </div>
   );
