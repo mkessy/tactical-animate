@@ -1,7 +1,7 @@
 import { PlayerOnBoard } from "../types/Player";
 import { useEffect, useRef } from "react";
 import { select, drag } from "d3";
-import makeRenderFunc from "../utils/canvas/renders";
+import { makeRenderFunc } from "../utils/canvas/renders";
 import config from "../config";
 import {
   makeDragSubjectFunc,

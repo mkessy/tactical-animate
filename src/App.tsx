@@ -1,18 +1,16 @@
 import "./App.css";
-import { CanvasContainer } from "./components/CanvasContainer";
 import { useState } from "react";
 import { PlayerOnBoard } from "./types/Player";
 import { schemeCategory10, range } from "d3";
-import { CanvasContainerProps } from "./types/Canvas";
+import config from "./config";
 import TacticalBoard from "./components/TacticalBoard";
+import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
 
-const radius = 16;
-const width = 500;
-const height = 500;
+const { HEIGHT, WIDTH, RADIUS } = config.canvas;
 
 const initialPlayers: PlayerOnBoard[] = range(20).map((v, i) => {
-  const x = Math.random() * (width - radius * 2) + radius;
-  const y = Math.random() * (height - radius * 2) + radius;
+  const x = Math.random() * (WIDTH - RADIUS * 2) + RADIUS;
+  const y = Math.random() * (HEIGHT - RADIUS * 2) + RADIUS;
 
   return {
     id: i,
@@ -27,15 +25,28 @@ const initialPlayers: PlayerOnBoard[] = range(20).map((v, i) => {
 
 function App() {
   const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
+  const [animate, setAnimate] = useState<boolean>(false);
 
   return (
     <div className="flex max-w-screen-lg mx-auto">
-      <div className="m-3 border border-solid border-gray-600"></div>
+      <div className="m-3 border border-solid border-gray-600">
+        {animate ? (
+          <AnimatedCanvasFrame players={players} />
+        ) : (
+          <TacticalBoard
+            initPlayers={initialPlayers}
+            setGlobalCanvasState={setPlayers}
+          />
+        )}
+      </div>
       <div>
-        <TacticalBoard
-          initPlayers={initialPlayers}
-          setGlobalCanvasState={setPlayers}
-        />
+        <button
+          onClick={() => {
+            setAnimate(!animate);
+          }}
+        >
+          Animate
+        </button>
       </div>
     </div>
   );

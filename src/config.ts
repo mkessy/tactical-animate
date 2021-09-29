@@ -14,6 +14,7 @@ const config = {
 
     animation: {
         DEFAULT_INTERPOLATOR: interpolate,
+        DURATION: 2000, // animation duration in ms
     },
 
     football: {

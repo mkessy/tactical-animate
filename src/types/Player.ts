@@ -12,7 +12,6 @@ interface PlayerOnBoard {
     history: PlayerOnBoardHistory;
     team?: string;
 }
-type interpolatorType = interpolateA
 
 interface InterpolatedPlayer {
   id: number;
