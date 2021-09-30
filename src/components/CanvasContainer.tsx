@@ -1,5 +1,5 @@
 import { PlayerOnBoard } from "../types/Player";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { select, drag } from "d3";
 import { makeRenderFunc } from "../utils/canvas/renders";
 import config from "../config";
@@ -16,16 +16,26 @@ export const CanvasContainer = ({
   players,
   onCanvasStateChange,
 }: CanvasContainerProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  //consider this local state for the canvas
-  const PlayersOnBoardState = useRef<PlayerOnBoard[]>(players);
-  const dragSubject = makeDragSubjectFunc(PlayersOnBoardState.current);
-  const onDragStart = makeOnDragStartFunc(PlayersOnBoardState.current);
-  const onDrag = makeOnDragFunc(PlayersOnBoardState.current);
-  const onDragEnd = makeOnDragEndFunc(PlayersOnBoardState.current);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [canvasReady, setCanvasReady] = useState<boolean>(false);
   const { WIDTH, HEIGHT } = config.canvas;
+  const PlayersOnBoardState = useRef<PlayerOnBoard[]>(players);
 
-  useEffect(() => {
+  const setCanvasRef = useCallback((node: HTMLCanvasElement) => {
+    if (node) {
+      canvasRef.current = node;
+      setCanvasReady(true);
+    }
+  }, []);
+
+  //consider this local state for the canvas
+
+  const setUpCanvas = useCallback(() => {
+    console.error("canvas ready!");
+    const dragSubject = makeDragSubjectFunc(PlayersOnBoardState.current);
+    const onDragStart = makeOnDragStartFunc(PlayersOnBoardState.current);
+    const onDrag = makeOnDragFunc(PlayersOnBoardState.current);
+    const onDragEnd = makeOnDragEndFunc(PlayersOnBoardState.current);
     const canvasContainer = select(canvasRef.current);
     const ctx = canvasContainer.node()?.getContext("2d");
 
@@ -46,13 +56,16 @@ export const CanvasContainer = ({
       });
 
     canvasContainer.call(canvasDrag as any);
+    render();
+  }, [onCanvasStateChange]);
 
-    // functionality for adding over events. can reuse subject funciton from drag api
-    /* canvasContainer.on("mousemove", (e) => {
-      const [x, y] = pointer(e, canvasContainer.node());
-      console.error(x, y);
-    }); */
-  }, [onCanvasStateChange, onDragStart, onDragEnd, onDrag, dragSubject]);
+  useEffect(() => {
+    if (canvasReady) {
+      setUpCanvas();
+    } else {
+      console.error("canvas not yet ready");
+    }
+  }, [canvasReady, setUpCanvas]);
 
-  return <PureCanvas width={WIDTH} height={HEIGHT} ref={canvasRef} />;
+  return <PureCanvas width={WIDTH} height={HEIGHT} ref={setCanvasRef} />;
 };

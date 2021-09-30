@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { CanvasContainerProps } from "../types/Canvas";
 import { PlayerOnBoard } from "../types/Player";
 import { CanvasContainer } from "./CanvasContainer";
@@ -12,9 +12,12 @@ export default function TacticalBoard({
   initPlayers,
   setGlobalCanvasState,
 }: TacticalBoardProps) {
-  const onDragPlayer = (players: PlayerOnBoard[]) => {
-    setGlobalCanvasState(players);
-  };
+  const onDragPlayer = useCallback(
+    (players: PlayerOnBoard[]) => {
+      setGlobalCanvasState(players);
+    },
+    [setGlobalCanvasState]
+  );
 
   const canvasProps: CanvasContainerProps = {
     players: initPlayers,

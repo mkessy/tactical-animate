@@ -55,7 +55,7 @@ export const makeAnimatedRenderFunc = (
       const [x, y] = interpolator(t) as [number, number];
       ctx.beginPath();
       ctx.moveTo(x + RADIUS, y);
-      ctx.arc(x, y, RADIUS, 0, 2 & Math.PI);
+      ctx.arc(x, y, RADIUS, 0, 2 * Math.PI);
       ctx.fillStyle = color;
       ctx.fill();
     }
