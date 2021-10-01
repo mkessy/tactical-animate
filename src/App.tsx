@@ -5,18 +5,37 @@ import { schemeCategory10, range } from "d3";
 import config from "./config";
 import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
+import { squad } from "./test_data/squad";
 
 const { HEIGHT, WIDTH, RADIUS } = config.canvas;
 
-const initialPlayers: PlayerOnBoard[] = range(20).map((v, i) => {
+interface ApiPlayer {
+  id: number;
+  name: string;
+  age: number;
+  number: number | null;
+  position: string;
+  photo: string;
+}
+
+const players: ApiPlayer[] = squad.response[0].players;
+
+const initialPlayers: PlayerOnBoard[] = players.map((p, i) => {
   const x = Math.random() * (WIDTH - RADIUS * 2) + RADIUS;
   const y = Math.random() * (HEIGHT - RADIUS * 2) + RADIUS;
 
+  const { id, name, age, number, position, photo } = p;
+
   return {
-    id: i,
+    id,
+    name,
+    age,
+    number,
+    position,
+    photoUrl: photo,
     x,
     y,
-    color: schemeCategory10[i % 10],
+    color: schemeCategory10[3],
     active: false,
     history: [[x, y]],
     draggable: true,
@@ -28,27 +47,44 @@ function App() {
   const [animate, setAnimate] = useState<boolean>(false);
 
   return (
-    <div className="flex max-w-screen-lg mx-auto">
-      <div className="m-3 border border-solid border-gray-600">
-        {animate ? (
-          <AnimatedCanvasFrame players={players} />
-        ) : (
-          <TacticalBoard
-            initPlayers={initialPlayers}
-            setGlobalCanvasState={setPlayers}
-          />
-        )}
+    <>
+      <button
+        onClick={() => {
+          setAnimate(!animate);
+        }}
+      >
+        Animate
+      </button>
+      <div className="max-w-screen-lg mx-auto mt-12">
+        <div className="mx-3 border-2 rounded border-solid h-40 flex-row border-gray-600">
+          <div className=""></div>
+        </div>
+        <div className="flex">
+          <div className="m-3 border-4 border-opacity-50 rounded border-solid border-gray-600">
+            {animate ? (
+              <AnimatedCanvasFrame players={players} />
+            ) : (
+              <TacticalBoard
+                initPlayers={initialPlayers}
+                setGlobalCanvasState={setPlayers}
+              />
+            )}
+          </div>
+          <div className="border-2 rounded border-solid border-gray-600 flex-grow m-3">
+            <div className="flex-col">
+              {/* {
+              players.map((p, i) => {
+              return <div className="rounded overflow-hidden shadow-lg">
+                
+              </div>}
+
+              }
+            } */}
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <button
-          onClick={() => {
-            setAnimate(!animate);
-          }}
-        >
-          Animate
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 

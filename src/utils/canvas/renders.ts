@@ -4,10 +4,6 @@ import { render } from "react-dom";
 import { interpolate } from "d3-interpolate";
 import interpolatePlayers from "./animation";
 
-type renderCanvasType = (
-  ctx: CanvasRenderingContext2D,
-  players: PlayerOnBoard[]
-) => void;
 
 const renderPlayer = (
   ctx: CanvasRenderingContext2D,

@@ -24,9 +24,5 @@ export default function TacticalBoard({
     onCanvasStateChange: onDragPlayer,
   };
 
-  return (
-    <>
-      <CanvasContainer {...canvasProps} />;
-    </>
-  );
+  return <CanvasContainer {...canvasProps} />;
 }

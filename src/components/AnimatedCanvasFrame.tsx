@@ -22,6 +22,8 @@ export const AnimatedCanvasFrame = ({ players }: AnimatedCanvasFrameProps) => {
 
   const { WIDTH, HEIGHT } = config.canvas;
 
+  //TO-DO clean up event listeners and cancelAnimationFrame
+  //TO-DO component clean up functions
   useEffect(() => {
     if (canvasReady) {
       console.error("canvas ready!");

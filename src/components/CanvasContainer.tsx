@@ -1,10 +1,12 @@
 import { PlayerOnBoard } from "../types/Player";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { select, drag } from "d3";
+import { select, drag, pointer } from "d3";
 import { makeRenderFunc } from "../utils/canvas/renders";
 import config from "../config";
 import {
+  findSubject,
   makeDragSubjectFunc,
+  makeOnDblClickFunc,
   makeOnDragEndFunc,
   makeOnDragFunc,
   makeOnDragStartFunc,
@@ -19,6 +21,8 @@ export const CanvasContainer = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasReady, setCanvasReady] = useState<boolean>(false);
   const { WIDTH, HEIGHT } = config.canvas;
+
+  //consider this local state for the canvas
   const PlayersOnBoardState = useRef<PlayerOnBoard[]>(players);
 
   const setCanvasRef = useCallback((node: HTMLCanvasElement) => {
@@ -28,7 +32,8 @@ export const CanvasContainer = ({
     }
   }, []);
 
-  //consider this local state for the canvas
+  //TO-DO clean up event listeners and cancelAnimationFrame
+  //TO-DO component clean up functions
 
   const setUpCanvas = useCallback(() => {
     console.error("canvas ready!");
@@ -38,6 +43,7 @@ export const CanvasContainer = ({
     const onDragEnd = makeOnDragEndFunc(PlayersOnBoardState.current);
     const canvasContainer = select(canvasRef.current);
     const ctx = canvasContainer.node()?.getContext("2d");
+    const onDblClick = makeOnDblClickFunc(PlayersOnBoardState.current);
 
     const render = makeRenderFunc(ctx!, PlayersOnBoardState.current);
 
@@ -50,10 +56,15 @@ export const CanvasContainer = ({
       .on("end", onDragEnd)
       .on("start.render drag.render end.render", () => {
         render();
-        // this hoists the local "canvas state" up to the parent component
+        // this sends the local "canvas state" up to the parent component
         // you need to send a copy because the *reference* to the players ref doesn't change
         onCanvasStateChange([...PlayersOnBoardState.current]);
       });
+
+    canvasContainer.on("dblclick", (e: Event) => {
+      onDblClick(e);
+      render();
+    });
 
     canvasContainer.call(canvasDrag as any);
     render();

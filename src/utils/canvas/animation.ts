@@ -5,7 +5,7 @@ import { InterpolatedPlayer, PlayerOnBoard } from "../../types/Player";
 const interpolatePlayers = (players: PlayerOnBoard[], interpolator: typeof interpolate): InterpolatedPlayer[] => {
     return players.map(p => {
       const {history, color, id} = p;
-      const start = history[0];
+      const start = history[history.length-2 >= 0 ? history.length-2 : 0];
       const end = history[history.length-1];
       return {
         id,
