@@ -60,7 +60,7 @@ function App() {
         <div className="mx-3 border-2 rounded border-solid h-40 flex-row border-gray-600">
           <div className=""></div>
         </div>
-        <div className="flex">
+        <div className="flex canvas-height">
           <div className="m-3 border-4 border-opacity-50 rounded border-solid border-gray-600">
             {animate ? (
               <AnimatedCanvasFrame players={players} />
@@ -71,7 +71,7 @@ function App() {
               />
             )}
           </div>
-          <div className="border-2 rounded border-solid border-gray-600 flex-grow m-3">
+          <div className="border-2 rounded border-solid border-gray-600 flex-grow m-3 overflow-y-scroll">
             <PlayerOnBoardList players={players} />
           </div>
         </div>
