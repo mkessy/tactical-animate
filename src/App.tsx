@@ -6,6 +6,7 @@ import config from "./config";
 import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
 import { squad } from "./test_data/squad";
+import PlayerOnBoardList from "./components/PlayerOnBoardList";
 
 const { HEIGHT, WIDTH, RADIUS } = config.canvas;
 
@@ -30,7 +31,7 @@ const initialPlayers: PlayerOnBoard[] = players.map((p, i) => {
     id,
     name,
     age,
-    number,
+    number: number ? number : null,
     position,
     photoUrl: photo,
     x,
@@ -71,16 +72,7 @@ function App() {
             )}
           </div>
           <div className="border-2 rounded border-solid border-gray-600 flex-grow m-3">
-            <div className="flex-col">
-              {/* {
-              players.map((p, i) => {
-              return <div className="rounded overflow-hidden shadow-lg">
-                
-              </div>}
-
-              }
-            } */}
-            </div>
+            <PlayerOnBoardList players={players} />
           </div>
         </div>
       </div>

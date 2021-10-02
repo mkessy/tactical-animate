@@ -1,4 +1,4 @@
-import { interpolate, interpolateArray } from "d3";
+import { interpolate } from "d3";
 
 type PlayerOnBoardHistory = [number, number][];
 
@@ -8,6 +8,7 @@ interface PlayerOnBoard {
   age: number;
   position: string;
   photoUrl: string;
+  number?: number | null;
   x: number;
   y: number;
   color: string; // style type
