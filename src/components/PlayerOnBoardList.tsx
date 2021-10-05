@@ -1,5 +1,4 @@
 import React from "react";
-import { JsxElement } from "typescript";
 import { PlayerOnBoard } from "../types/Player";
 
 const PlayerOnBoardList = ({ players }: { players: PlayerOnBoard[] }) => {

@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import { PlayerOnBoard } from "./types/Player";
-import { schemeCategory10, range } from "d3";
+import { schemeCategory10 } from "d3";
 import config from "./config";
 import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";

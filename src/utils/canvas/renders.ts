@@ -1,7 +1,5 @@
 import { PlayerOnBoard } from "../../types/Player";
 import config from "../../config";
-import { render } from "react-dom";
-import { interpolate } from "d3-interpolate";
 import interpolatePlayers from "./animation";
 
 const renderPlayer = (
