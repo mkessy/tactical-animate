@@ -18,9 +18,7 @@ interface PlayerOnBoard {
   team?: string;
 }
 
-interface InterpolatedPlayer {
-  id: number;
-  color: string;
+interface InterpolatedPlayer extends PlayerOnBoard {
   interpolator: ReturnType<typeof interpolate>;
 }
 export type { PlayerOnBoard, InterpolatedPlayer };

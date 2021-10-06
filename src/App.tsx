@@ -5,7 +5,7 @@ import { schemeCategory10 } from "d3";
 import config from "./config";
 import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
-import { squad } from "./test_data/squad";
+import { squad } from "./test_data/TestApiResponse";
 import PlayerOnBoardList from "./components/PlayerOnBoardList";
 
 const { HEIGHT, WIDTH, RADIUS } = config.canvas;

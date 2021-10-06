@@ -1,0 +1,109 @@
+{
+	"id": "aa3eb18b-55c0-4391-8df6-c556a1c3692b",
+	"name": "API-FOOTBALL",
+	"timestamp": "2021-10-06T04:16:00.377Z",
+	"collection_id": "16462541-d8f58f91-47cf-4c58-bd61-8263844aba8f",
+	"folder_id": 0,
+	"environment_id": "a5ae8f09-4559-4b36-93d7-7f46f1edfe4b",
+	"totalPass": 22,
+	"totalFail": 2,
+	"results": [
+		{
+			"id": "bf33dbf3-93e3-489c-8977-b7ce6eaa0509",
+			"name": "Squad by team id",
+			"time": 721,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Body has json data": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 10,
+					"fail": 2
+				},
+				"Body has json data": {
+					"pass": 12,
+					"fail": 0
+				}
+			},
+			"times": [
+				716,
+				766,
+				684,
+				714,
+				668,
+				744,
+				784,
+				716,
+				735,
+				707,
+				738,
+				721
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": false,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": false,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				},
+				{
+					"Status code is 200": true,
+					"Body has json data": true
+				}
+			]
+		}
+	],
+	"count": 12,
+	"totalTime": 8693,
+	"collection": {
+		"requests": [
+			{
+				"id": "bf33dbf3-93e3-489c-8977-b7ce6eaa0509",
+				"method": "GET"
+			}
+		]
+	}
+}
