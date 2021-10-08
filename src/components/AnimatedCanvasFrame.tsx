@@ -1,6 +1,6 @@
 import { PlayerOnBoard } from "../types/Player";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { easeQuadInOut, interpolate } from "d3";
+import { easeQuadInOut } from "d3";
 import { makeAnimatedRenderFunc } from "../utils/canvas/renders";
 import config from "../config";
 import { PureCanvas } from "./PureCanvas";
