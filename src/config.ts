@@ -5,8 +5,8 @@ import { interpolate } from "d3-interpolate";
 //canvas
 const config = {
   canvas: {
-    WIDTH: 675,
-    HEIGHT: 675 * 0.76923077,
+    WIDTH: 800,
+    HEIGHT: 800 * 0.76923077,
     RADIUS: 12,
   },
 

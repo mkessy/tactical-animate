@@ -7,6 +7,9 @@ import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
 import { squad } from "./test_data/TestApiResponse";
 import PlayerOnBoardList from "./components/PlayerOnBoardList";
+import { Box, Grid } from "@mui/material";
+import { Tab } from "@headlessui/react";
+import AlignItemsList from "./components/AlignItemsList";
 
 const { HEIGHT, WIDTH, RADIUS } = config.canvas;
 
@@ -48,15 +51,24 @@ function App() {
   const [animate, setAnimate] = useState<boolean>(false);
 
   return (
-    <>
-      <button
-        onClick={() => {
-          setAnimate(!animate);
-        }}
-      >
-        Animate
-      </button>
-    </>
+    <Box sx={{ width: 1200, margin: "auto" }}>
+      <Grid container>
+        <Grid item xs={12}>
+          ANIMATE FRAMES
+        </Grid>
+        <Grid item container xs={12} spacing={2}>
+          <Grid item xs={8}>
+            <TacticalBoard
+              initPlayers={players}
+              setGlobalCanvasState={setPlayers}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <AlignItemsList players={players} />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
