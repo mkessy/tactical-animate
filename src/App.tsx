@@ -7,7 +7,7 @@ import TacticalBoard from "./components/TacticalBoard";
 import { AnimatedCanvasFrame } from "./components/AnimatedCanvasFrame";
 import { squad } from "./test_data/TestApiResponse";
 import PlayerOnBoardList from "./components/PlayerOnBoardList";
-import { Box, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { Tab } from "@headlessui/react";
 import AlignItemsList from "./components/AlignItemsList";
 
@@ -29,7 +29,7 @@ const initialPlayers: PlayerOnBoard[] = players.map((p, i) => {
   const y = Math.random() * (HEIGHT - RADIUS * 2) + RADIUS;
 
   const { id, name, age, number, position, photo } = p;
-
+  
   return {
     id,
     name,
@@ -47,11 +47,13 @@ const initialPlayers: PlayerOnBoard[] = players.map((p, i) => {
 });
 
 function App() {
-  const [players, setPlayers] = useState<PlayerOnBoard[]>(initialPlayers);
+  const [players, setPlayers] = useState<PlayerOnBoard[]>(
+    initialPlayers.slice(0, 10)
+  );
   const [animate, setAnimate] = useState<boolean>(false);
 
   return (
-    <Box sx={{ width: 1200, margin: "auto" }}>
+    <Container sx={{ width: 1200 }}>
       <Grid container>
         <Grid item xs={12}>
           ANIMATE FRAMES
@@ -68,7 +70,7 @@ function App() {
           </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }
 
